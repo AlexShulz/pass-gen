@@ -26,7 +26,8 @@ class Main_Window(QtGui.QWidget):
         self.Abc_check = QtGui.QCheckBox()
         self.sim_check = QtGui.QCheckBox()
         self.quantity = QtGui.QSpinBox()
-        self.quantity.setValue(8)
+        self.quantity.setMinimum(8)
+        self.quantity.setMaximum(28)
 
         self.gen_btn = QtGui.QPushButton(u"Сгенерировать")
 
