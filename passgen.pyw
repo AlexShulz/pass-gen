@@ -10,6 +10,7 @@ class Main_Window(QtGui.QWidget):
         self.center()
         self.setFixedSize(300, 220)
         self.setWindowTitle("Password generator v.1.0")
+        self.setWindowIcon(QtGui.QIcon('key.png'))
 
         self.pwd_label = QtGui.QLabel(u"Пароль")
         self.num_label = QtGui.QLabel(u"Цифры")
@@ -61,17 +62,25 @@ class Main_Window(QtGui.QWidget):
         uabc_string = string.ascii_uppercase
         spec_chars = "!@#$%^&*(){}[]?,."
         chars = ""
-        if self.num_check.isChecked():
-            chars += digits
-        if self.abc_check.isChecked():
-            chars += abc_string
-        if self.Abc_check.isChecked():
-            chars += uabc_string
-        if self.sim_check.isChecked():
-            chars += spec_chars
-
-        password = ''.join(random.choice(chars) for i in range(self.quantity.value()))
-        self.pwd_line.setText(password)
+        if True in [self.num_check.isChecked(), self.abc_check.isChecked(), self.Abc_check.isChecked(),
+                    self.sim_check.isChecked()]:
+            if self.num_check.isChecked():
+                chars += digits
+            if self.abc_check.isChecked():
+                chars += abc_string
+            if self.Abc_check.isChecked():
+                chars += uabc_string
+            if self.sim_check.isChecked():
+                chars += spec_chars
+            password = ''.join(random.choice(chars) for i in range(self.quantity.value()))
+            self.pwd_line.setText(password)
+        else:
+            informer = QtGui.QMessageBox()
+            informer.setWindowTitle("Password generator v.1.0")
+            informer.setStandardButtons(QtGui.QMessageBox.Ok)
+            informer.setDefaultButton(QtGui.QMessageBox.Ok)
+            informer.setText("Необходимо выбрать хотябы один набор символов!")
+            informer.exec_()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
