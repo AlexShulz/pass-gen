@@ -64,14 +64,8 @@ class Main_Window(QtGui.QWidget):
         chars = ""
         if True in [self.num_check.isChecked(), self.abc_check.isChecked(), self.Abc_check.isChecked(),
                     self.sim_check.isChecked()]:
-            if self.num_check.isChecked():
-                chars += digits
-            if self.abc_check.isChecked():
-                chars += abc_string
-            if self.Abc_check.isChecked():
-                chars += uabc_string
-            if self.sim_check.isChecked():
-                chars += spec_chars
+            chars = digits * self.num_check.isChecked() + abc_string*self.abc_check.isChecked() +\
+                    uabc_string * self.Abc_check.isChecked() + spec_chars*self.sim_check.isChecked()
             password = ''.join(random.choice(chars) for i in range(self.quantity.value()))
             self.pwd_line.setText(password)
         else:
