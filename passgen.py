@@ -7,11 +7,18 @@ import random
 class Main_Window(QtGui.QWidget):
     def __init__(self):
         QtGui.QWidget.__init__(self)
+        self.initWindow()
+        self.initLabels()
+        self.initElements()
+        self.initLayout()
+
+    def initWindow(self):
         self.center()
-        self.setFixedSize(300, 220)
+        self.setFixedSize(400, 200)
         self.setWindowTitle("Password generator v.1.0")
         self.setWindowIcon(QtGui.QIcon('key.png'))
 
+    def initLabels(self):
         self.pwd_label = QtGui.QLabel(u"Пароль")
         self.num_label = QtGui.QLabel(u"Цифры")
         self.abc_label = QtGui.QLabel(u"Строчные буквы")
@@ -19,6 +26,7 @@ class Main_Window(QtGui.QWidget):
         self.sim_label = QtGui.QLabel(u"Спецсимволы")
         self.qnt_label = QtGui.QLabel(u"Количество символов")
 
+    def initElements(self):
         self.pwd_line = QtGui.QLineEdit()
         self.pwd_line.setReadOnly(True)
         self.num_check = QtGui.QCheckBox()
@@ -31,21 +39,25 @@ class Main_Window(QtGui.QWidget):
         self.quantity.setMaximum(28)
 
         self.gen_btn = QtGui.QPushButton(u"Сгенерировать")
+        self.cpy_btn = QtGui.QPushButton(u"Скопировать")
 
+    def initLayout(self):
+        # TODO разобраться с сеткой и выровнять всё как положено
         self.grid = QtGui.QGridLayout()
         self.grid.addWidget(self.num_check, 0, 0)
-        self.grid.addWidget(self.num_label, 0, 1, 1, 6)
-        self.grid.addWidget(self.abc_check, 1, 0)
-        self.grid.addWidget(self.abc_label, 1, 1, 1, 6)
-        self.grid.addWidget(self.Abc_check, 2, 0)
-        self.grid.addWidget(self.Abc_label, 2, 1, 1, 6)
-        self.grid.addWidget(self.sim_check, 3, 0)
-        self.grid.addWidget(self.sim_label, 3, 1, 1, 6)
-        self.grid.addWidget(self.quantity, 4, 0, 2, 1)
-        self.grid.addWidget(self.qnt_label, 4, 1, 2, 1)
-        self.grid.addWidget(self.pwd_label, 6, 0, 2, 2)
-        self.grid.addWidget(self.pwd_line, 6, 1, 2, 6)
-        self.grid.addWidget(self.gen_btn, 8, 0, 2, 6)
+        self.grid.addWidget(self.num_label, 0, 1, 1, 4)
+        self.grid.addWidget(self.abc_check, 0, 5)
+        self.grid.addWidget(self.abc_label, 0, 6, 1, 4)
+        self.grid.addWidget(self.Abc_check, 1, 0)
+        self.grid.addWidget(self.Abc_label, 1, 1, 1, 4)
+        self.grid.addWidget(self.sim_check, 1, 5)
+        self.grid.addWidget(self.sim_label, 1, 6, 1, 5)
+        self.grid.addWidget(self.quantity, 2, 0, 1, 2)
+        self.grid.addWidget(self.qnt_label, 2, 3, 1, 5)
+        self.grid.addWidget(self.pwd_label, 3, 0, 1, 5)
+        self.grid.addWidget(self.pwd_line, 4, 0, 1, 10, alignment=QtCore.Qt.AlignJustify)
+        self.grid.addWidget(self.gen_btn, 5, 0, 1, 4)
+        self.grid.addWidget(self.cpy_btn, 5, 5, 1, 4)
 
         self.setLayout(self.grid)
 
@@ -70,7 +82,7 @@ class Main_Window(QtGui.QWidget):
             self.pwd_line.setText(password)
         else:
             informer = QtGui.QMessageBox()
-            informer.setWindowTitle("Password generator v.1.0")
+            informer.setWindowTitle("Password generator v.1.1")
             informer.setStandardButtons(QtGui.QMessageBox.Ok)
             informer.setDefaultButton(QtGui.QMessageBox.Ok)
             informer.setText("Необходимо выбрать хотябы один набор символов!")
