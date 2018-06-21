@@ -4,6 +4,8 @@ import string
 import random
 
 
+__version__ = "1.1"
+
 class Main_Window(QtGui.QWidget):
     def __init__(self):
         QtGui.QWidget.__init__(self)
@@ -15,7 +17,7 @@ class Main_Window(QtGui.QWidget):
     def initWindow(self):
         self.center()
         self.setFixedSize(300, 160)
-        self.setWindowTitle("Password generator v.1.0")
+        self.setWindowTitle("Password generator " + __version__)
         self.setWindowIcon(QtGui.QIcon('key.png'))
 
     def initLabels(self):
@@ -105,7 +107,8 @@ class Main_Window(QtGui.QWidget):
 
     def _show_informer(self, text):
         informer = QtGui.QMessageBox()
-        informer.setWindowTitle("Password generator v.1.1")
+        informer.setFixedSize(100, 100)
+        informer.setWindowTitle("Password generator " + __version__)
         informer.setWindowIcon(QtGui.QIcon('key.png'))
         informer.setStandardButtons(QtGui.QMessageBox.Ok)
         informer.setDefaultButton(QtGui.QMessageBox.Ok)
