@@ -2,3 +2,6 @@ build/
 __pycache__/
 *.py[cod]
 *.png
+env/
+develop-eggs/
+dist/
