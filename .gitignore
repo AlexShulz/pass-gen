@@ -1,7 +1,5 @@
-build/
 __pycache__/
-*.py[cod]
+*.py[cowd]
 *.png
 env/
-develop-eggs/
 dist/

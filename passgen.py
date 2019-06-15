@@ -1,54 +1,58 @@
-from PyQt4 import QtGui, QtCore
+"""The Simple Password Generator.
+"""
+import random
 import sys
 import string
-import random
+from PyQt5 import QtWidgets, QtGui
 
 
-__version__ = "1.1"
+__version__ = "1.2"
 
-class Main_Window(QtGui.QWidget):
+class MainWindow(QtWidgets.QWidget):
+    """MainWindow class.
+    """
     def __init__(self):
-        QtGui.QWidget.__init__(self)
-        self.initWindow()
-        self.initLabels()
-        self.initElements()
-        self.initLayout()
+        QtWidgets.QWidget.__init__(self)
+        self._initWindow()
+        self._initLabels()
+        self._initElements()
+        self._initLayout()
 
-    def initWindow(self):
-        self.center()
-        self.setFixedSize(300, 160)
+    def _initWindow(self):
+        self._center()
+        self.setFixedSize(380, 180)
         self.setWindowTitle("Password generator " + __version__)
         self.setWindowIcon(QtGui.QIcon('key.png'))
 
-    def initLabels(self):
-        self.pwd_label = QtGui.QLabel(u"Пароль:")
-        self.num_label = QtGui.QLabel(u"Цифры")
-        self.abc_label = QtGui.QLabel(u"Строчные буквы")
-        self.Abc_label = QtGui.QLabel(u"Прописные буквы")
-        self.sim_label = QtGui.QLabel(u"Спецсимволы")
-        self.qnt_label = QtGui.QLabel(u"Количество символов")
+    def _initLabels(self):
+        self.pwd_label = QtWidgets.QLabel(u"Пароль:")
+        self.num_label = QtWidgets.QLabel(u"Цифры")
+        self.abc_label = QtWidgets.QLabel(u"Строчные буквы")
+        self.Abc_label = QtWidgets.QLabel(u"Прописные буквы")
+        self.sim_label = QtWidgets.QLabel(u"Спецсимволы")
+        self.qnt_label = QtWidgets.QLabel(u"Количество символов")
 
-    def initElements(self):
-        self.pwd_line = QtGui.QLineEdit()
+    def _initElements(self):
+        self.pwd_line = QtWidgets.QLineEdit()
         self.pwd_line.setReadOnly(True)
-        self.num_check = QtGui.QCheckBox()
+        self.num_check = QtWidgets.QCheckBox()
         self.num_check.setChecked(True)
-        self.abc_check = QtGui.QCheckBox()
-        self.Abc_check = QtGui.QCheckBox()
-        self.sim_check = QtGui.QCheckBox()
-        self.quantity = QtGui.QSpinBox()
+        self.abc_check = QtWidgets.QCheckBox()
+        self.Abc_check = QtWidgets.QCheckBox()
+        self.sim_check = QtWidgets.QCheckBox()
+        self.quantity = QtWidgets.QSpinBox()
         self.quantity.setMinimum(8)
         self.quantity.setMaximum(32)
 
-        self.gen_btn = QtGui.QPushButton(u"Сгенерировать")
-        self.cpy_btn = QtGui.QPushButton(u"Скопировать")
+        self.gen_btn = QtWidgets.QPushButton(u"Сгенерировать")
+        self.cpy_btn = QtWidgets.QPushButton(u"Скопировать")
 
-    def initLayout(self):
-        self.main_layout = QtGui.QVBoxLayout()
-        self.grid_layout = QtGui.QGridLayout()
-        self.h1_layout = QtGui.QHBoxLayout()
-        self.h2_layout = QtGui.QHBoxLayout()
-        self.form_layout = QtGui.QFormLayout()
+    def _initLayout(self):
+        self.main_layout = QtWidgets.QVBoxLayout()
+        self.grid_layout = QtWidgets.QGridLayout()
+        self.h1_layout = QtWidgets.QHBoxLayout()
+        self.h2_layout = QtWidgets.QHBoxLayout()
+        self.form_layout = QtWidgets.QFormLayout()
         self.grid_layout.addWidget(self.num_check, 0, 0)
         self.grid_layout.addWidget(self.num_label, 0, 1)
         self.grid_layout.addWidget(self.abc_check, 0, 2)
@@ -70,15 +74,20 @@ class Main_Window(QtGui.QWidget):
         self.main_layout.addLayout(self.form_layout)
         self.setLayout(self.main_layout)
 
-        self.connect(self.gen_btn, QtCore.SIGNAL("clicked()"), self._gen_password)
-        self.connect(self.cpy_btn, QtCore.SIGNAL("clicked()"), self._copy_to_clipboard)
+        # connect signals to generate and copy password
+        self.gen_btn.clicked.connect(self.get_password)
+        self.cpy_btn.clicked.connect(self.copy_to_clipboard)
 
-    def center(self):
-        screen = QtGui.QDesktopWidget().screenGeometry()
+    def _center(self):
+        screen = QtWidgets.QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width()-size.width())/2, (screen.height()-size.height())/2)
 
-    def _gen_password(self):
+    def _gen_password(self, chars, size):
+            password = ''.join(random.choice(chars) for i in range(size))
+            return password
+
+    def get_password(self):
         digits = string.digits
         abc_string = string.ascii_lowercase
         uabc_string = string.ascii_uppercase
@@ -88,14 +97,13 @@ class Main_Window(QtGui.QWidget):
                     self.sim_check.isChecked()]:
             chars = digits * self.num_check.isChecked() + abc_string*self.abc_check.isChecked() +\
                     uabc_string * self.Abc_check.isChecked() + spec_chars*self.sim_check.isChecked()
-            password = ''.join(random.choice(chars) for i in range(self.quantity.value()))
+            password = self._gen_password(chars, self.quantity.value())
             self.pwd_line.setText(password)
         else:
-            self._show_informer("Необходимо выбрать хотябы один набор символов!")
+            self.show_informer("Необходимо выбрать хотябы один набор символов!")
 
-
-    def _copy_to_clipboard(self):
-        clpbrd = QtGui.QApplication.clipboard()
+    def copy_to_clipboard(self):
+        clpbrd = QtWidgets.QApplication.clipboard()
         text = self.pwd_line.text()
         if text is not None and text != '':
             clpbrd.clear()
@@ -103,20 +111,20 @@ class Main_Window(QtGui.QWidget):
             msg = "Пароль скопирован!"
         else:
             msg = "Пароль ещё не сгенерирован или пуст!"
-        self._show_informer(msg)
+        self.show_informer(msg)
 
-    def _show_informer(self, text):
-        informer = QtGui.QMessageBox()
+    def show_informer(self, text):
+        informer = QtWidgets.QMessageBox()
         informer.setFixedSize(100, 100)
         informer.setWindowTitle("Password generator " + __version__)
         informer.setWindowIcon(QtGui.QIcon('key.png'))
-        informer.setStandardButtons(QtGui.QMessageBox.Ok)
-        informer.setDefaultButton(QtGui.QMessageBox.Ok)
+        informer.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        informer.setDefaultButton(QtWidgets.QMessageBox.Ok)
         informer.setText(text)
         informer.exec_()
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    MW = Main_Window()
+    app = QtWidgets.QApplication(sys.argv)
+    MW = MainWindow()
     MW.show()
     sys.exit(app.exec_())
